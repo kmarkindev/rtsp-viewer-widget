@@ -1,0 +1,4 @@
+cmake-*/
+.vs/
+.idea/
+out/
