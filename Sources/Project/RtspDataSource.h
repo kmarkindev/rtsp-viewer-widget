@@ -6,14 +6,9 @@ class RtspDataSource
 {
 public:
 
-	RtspDataSource() = default;
-	explicit RtspDataSource(QByteArray url);
-
-	QJsonObject toJson() const;
-	static RtspDataSource fromJson(QJsonObject jsonObject);
-
-private:
-
 	QByteArray url {};
+
+	[[nodiscard]] QJsonObject toJson() const;
+	static RtspDataSource fromJson(QJsonObject jsonObject);
 
 };

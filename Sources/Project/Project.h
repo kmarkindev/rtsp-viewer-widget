@@ -16,8 +16,6 @@ public:
 
 	QVector<RtspDataSource> rtspDataSources {};
 
-	Project() = default;
-
 	[[nodiscard]] QJsonObject toJson() const;
 	static Project fromJson(QJsonObject jsonObject);
 };

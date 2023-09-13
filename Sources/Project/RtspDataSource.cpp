@@ -1,13 +1,6 @@
 #include "RtspDataSource.h"
 
 #include <QJsonObject>
-#include <utility>
-
-RtspDataSource::RtspDataSource(QByteArray url)
-	: url(std::move(url))
-{
-
-}
 
 QJsonObject RtspDataSource::toJson() const
 {
@@ -25,5 +18,5 @@ RtspDataSource RtspDataSource::fromJson(QJsonObject jsonObject)
 	if(QJsonValue val = jsonObject["url"]; val.isString())
 		result.url = val.toString().toUtf8();
 
-	return {};
+	return result;
 }
