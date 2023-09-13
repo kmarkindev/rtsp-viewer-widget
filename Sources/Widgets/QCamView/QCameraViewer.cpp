@@ -3,10 +3,13 @@
 #include <functional>
 #include <utility>
 #include <gst/gst.h>
+#include <gst/video/videooverlay.h>
+#include <QHBoxLayout>
 
 QCameraViewer::QCameraViewer(QWidget* parent)
 	: QWidget(parent)
 {
+	setupUi();
 	clearContent();
 }
 
@@ -21,7 +24,7 @@ bool QCameraViewer::setupPipeline(QByteArray address)
 		rtspSourceElement = gst_element_factory_make("rtspsrc", nullptr),
 		decodebin3Element = gst_element_factory_make("decodebin3", nullptr),
 		videoConvertElement = gst_element_factory_make("videoconvert", nullptr),
-		autoVideoSinkElement = gst_element_factory_make("autovideosink", nullptr)
+		videoSinkElement = gst_element_factory_make("playsink", nullptr)
 	};
 
 	// Make sure all of them were created
@@ -57,10 +60,11 @@ bool QCameraViewer::setupPipeline(QByteArray address)
 
 	// set properties
 	g_object_set(rtspSourceElement, "location", address.data(), nullptr);
-	g_object_set(autoVideoSinkElement, "sync", false, nullptr);
+
+	gst_element_request_pad_simple(videoSinkElement, "video_sink");
 
 	// Link elements that can be safely linked
-	bool sinkLinked = gst_element_link(videoConvertElement, autoVideoSinkElement);
+	bool sinkLinked = gst_element_link(videoConvertElement, videoSinkElement);
 	if(!sinkLinked)
 	{
 		updateState(false);
@@ -88,6 +92,10 @@ bool QCameraViewer::setupPipeline(QByteArray address)
 		return false;
 	}
 
+	// Set up video rendering to canvas widget
+	WId xwinid = canvas->winId();
+	gst_video_overlay_set_window_handle(GST_VIDEO_OVERLAY(videoSinkElement), xwinid);
+
 	updateState(true);
 	return true;
 }
@@ -112,7 +120,7 @@ void QCameraViewer::destructPipeline()
 	rtspSourceElement = nullptr;
 	decodebin3Element = nullptr;
 	videoConvertElement = nullptr;
-	autoVideoSinkElement = nullptr;
+	videoSinkElement = nullptr;
 
 	clearContent();
 
@@ -219,4 +227,13 @@ void QCameraViewer::updateState(bool newState)
 
 	if(oldState != newState)
 		emit stateChanged(newState);
+}
+
+void QCameraViewer::setupUi()
+{
+	auto* HorLayout = new QHBoxLayout { this };
+	setLayout(HorLayout);
+
+	canvas = new QWidget {};
+	HorLayout->addWidget(canvas);
 }

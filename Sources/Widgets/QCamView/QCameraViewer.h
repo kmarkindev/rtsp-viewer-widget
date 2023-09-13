@@ -2,8 +2,6 @@
 
 #include <QWidget>
 
-// TODO: rtspsrc location=rtsp://127.0.0.1:554/live ! decodebin3 ! video/x-raw,format=RGB ! videoconvert ! autovideosink sync=false
-
 struct _GstElement;
 typedef struct _GstElement GstElement;
 
@@ -37,6 +35,8 @@ public:
 
 private:
 
+	void setupUi();
+
 	void updateState(bool newState);
 
 	void clearContent();
@@ -57,6 +57,8 @@ private:
 	GstElement* rtspSourceElement {};
 	GstElement* decodebin3Element {};
 	GstElement* videoConvertElement {};
-	GstElement* autoVideoSinkElement {};
+	GstElement* videoSinkElement {};
+
+	QWidget* canvas {};
 
 };

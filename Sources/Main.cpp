@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 	viewer.show();
 
 	QObject::connect(&viewer, &QCameraViewer::errorOccurred, &a, [](QString error) {
-		qDebug() << "Error signal: " << error;
+		qDebug() << "Error signal in v1: " << error;
 	});
 
 	QCameraViewer viewer2 { nullptr };
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 	viewer2.show();
 
 	QObject::connect(&viewer2, &QCameraViewer::errorOccurred, &a, [](QString error) {
-		qDebug() << "Error signal: " << error;
+		qDebug() << "Error signal in v2: " << error;
 	});
 
 	return QApplication::exec();
