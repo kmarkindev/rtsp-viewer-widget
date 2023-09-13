@@ -36,5 +36,6 @@ target_link_libraries(IpCamViewerApp PRIVATE
     Qt::Widgets
     GStreamer::GStreamer
 )
+target_include_directories(IpCamViewerApp PRIVATE Sources)
 
 add_subdirectory(Sources)
