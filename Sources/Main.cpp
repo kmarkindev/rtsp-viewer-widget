@@ -24,11 +24,19 @@ int main(int argc, char* argv[])
 	viewer.resize(800, 600);
 	viewer.show();
 
+	QObject::connect(&viewer, &QCameraViewer::errorOccurred, &a, [](QString error) {
+		qDebug() << "Error signal: " << error;
+	});
+
 	QCameraViewer viewer2 { nullptr };
 	viewer2.start("rtsp://user:pass@127.0.0.1:554/live");
 	viewer2.move(500, 500);
 	viewer2.resize(800, 600);
 	viewer2.show();
+
+	QObject::connect(&viewer2, &QCameraViewer::errorOccurred, &a, [](QString error) {
+		qDebug() << "Error signal: " << error;
+	});
 
 	return QApplication::exec();
 }

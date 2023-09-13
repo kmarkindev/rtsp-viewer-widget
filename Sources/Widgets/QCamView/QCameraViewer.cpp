@@ -45,7 +45,8 @@ bool QCameraViewer::setupPipeline(QByteArray address)
 			pipeline = nullptr;
 		}
 
-		qCritical() << "Can't create gstreamer elements";
+		updateState(false);
+		errorOccurred("Can't create gstreamer elements");
 		return false;
 	}
 
@@ -62,7 +63,8 @@ bool QCameraViewer::setupPipeline(QByteArray address)
 	bool sinkLinked = gst_element_link(videoConvertElement, autoVideoSinkElement);
 	if(!sinkLinked)
 	{
-		qCritical() << "Can't link gstreamer elements";
+		updateState(false);
+		errorOccurred("Can't link gstreamer elements");
 		return false;
 	}
 
@@ -76,23 +78,22 @@ bool QCameraViewer::setupPipeline(QByteArray address)
 
 	g_signal_connect(G_OBJECT(bus), "message::error", G_CALLBACK(&QCameraViewer::handleBusError), this);
 	g_signal_connect(G_OBJECT(bus), "message::eos", G_CALLBACK(&QCameraViewer::handleBusEos), this);
-	//g_signal_connect(G_OBJECT(bus), "message::state-changed", (GCallback)handleStateChangeEos, this);
 
 	// Finally start pipeline
 	GstStateChangeReturn stateChangeResult = gst_element_set_state(pipeline, GST_STATE_PLAYING);
 	if(stateChangeResult == GST_STATE_CHANGE_FAILURE)
 	{
-		qCritical() << "Can't set pipeline to PLAYING state";
+		updateState(false);
+		errorOccurred("Can't set pipeline to PLAYING state");
 		return false;
 	}
 
+	updateState(true);
 	return true;
 }
 
 void QCameraViewer::destructPipeline()
 {
-	isStarted = false;
-
 	if (pipeline)
 		gst_element_set_state(pipeline, GST_STATE_NULL);
 
@@ -114,6 +115,8 @@ void QCameraViewer::destructPipeline()
 	autoVideoSinkElement = nullptr;
 
 	clearContent();
+
+	updateState(false);
 }
 
 QCameraViewer::~QCameraViewer()
@@ -133,8 +136,8 @@ void QCameraViewer::handleDecodeBinPadAdded(GstElement* src, GstPad* newPad, QCa
 
 		if(GST_PAD_LINK_FAILED(linkResult))
 		{
-			qCritical() << "Can't link gstreamer pads";
 			widget->destructPipeline();
+			widget->errorOccurred("Can't link gstreamer pads");
 		}
 	}
 
@@ -157,8 +160,8 @@ void QCameraViewer::handleRtspSourcePadAdded(GstElement* src, GstPad* newPad, QC
 
 			if(GST_PAD_LINK_FAILED(linkResult))
 			{
-				qCritical() << "Can't link gstreamer pads";
 			  	widget->destructPipeline();
+				widget->errorOccurred("Can't link gstreamer pads");
 			}
 		}
 
@@ -175,12 +178,11 @@ void QCameraViewer::handleBusError(GstBus* bus, GstMessage* message, QCameraView
 
 	gst_message_parse_error(message, &error, &debugInfo);
 
-	qCritical() << error->message;
+	widget->destructPipeline();
+	widget->errorOccurred(error->message);
 
 	g_clear_error(&error);
 	g_free(debugInfo);
-
-	widget->destructPipeline();
 }
 
 void QCameraViewer::handleBusEos(GstBus* bus, GstMessage* message, QCameraViewer* widget)
@@ -190,7 +192,7 @@ void QCameraViewer::handleBusEos(GstBus* bus, GstMessage* message, QCameraViewer
 
 bool QCameraViewer::start(QByteArray cameraAddress)
 {
-	return isStarted = setupPipeline(std::move(cameraAddress));
+	return setupPipeline(std::move(cameraAddress));
 }
 
 bool QCameraViewer::started() const
@@ -206,4 +208,15 @@ void QCameraViewer::stop()
 void QCameraViewer::clearContent()
 {
 	// TODO:
+}
+
+void QCameraViewer::updateState(bool newState)
+{
+	bool oldState = isStarted;
+
+	// make sure widget state is updated before emitting the signal
+	isStarted = newState;
+
+	if(oldState != newState)
+		emit stateChanged(newState);
 }

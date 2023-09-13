@@ -20,6 +20,11 @@ class QCameraViewer : public QWidget
 {
 	Q_OBJECT
 
+signals:
+
+	void errorOccurred(QString error);
+	void stateChanged(bool wasStarted);
+
 public:
 
 	explicit QCameraViewer(QWidget* parent);
@@ -31,6 +36,8 @@ public:
 	void stop();
 
 private:
+
+	void updateState(bool newState);
 
 	void clearContent();
 
