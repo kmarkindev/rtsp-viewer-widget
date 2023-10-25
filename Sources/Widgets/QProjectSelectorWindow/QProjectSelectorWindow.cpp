@@ -31,7 +31,7 @@ void QProjectSelectorWindow::onOpenProjectClicked(bool)
 
 	if(error)
 	{
-		QMessageBox::critical(this, "Error", "Can't load project from selected file.");
+		QMessageBox::critical(this, "Error", "Can't load project from selected file");
 		return;
 	}
 
