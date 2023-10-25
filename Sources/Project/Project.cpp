@@ -43,7 +43,7 @@ Project Project::fromJson(QJsonObject jsonObject)
 			if(jsonValue.isObject())
 			{
 				project.rtspDataSources.append(
-					RtspDataSource::fromJson(jsonValue.toObject())
+						RtspDataSource::fromJson(jsonValue.toObject())
 				);
 			}
 		}
