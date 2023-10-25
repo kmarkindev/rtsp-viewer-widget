@@ -3,8 +3,7 @@
 #include <QObject>
 #include <QString>
 #include <QDateTime>
-
-class RtspDataSource;
+#include "RtspDataSource.h"
 
 class Project
 {
