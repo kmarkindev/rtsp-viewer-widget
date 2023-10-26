@@ -6,25 +6,93 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>1048</width>
+    <height>725</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>500</width>
+    <height>350</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>QProjectWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QListWidget" name="listWidget"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>2</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>1048</width>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuProject">
+    <property name="title">
+     <string>Project</string>
+    </property>
+    <addaction name="openProjectTool"/>
+    <addaction name="saveTool"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>Sources</string>
+    </property>
+    <addaction name="addSourceTool"/>
+    <addaction name="removeSourceTool"/>
+   </widget>
+   <addaction name="menuProject"/>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="saveTool">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="addSourceTool">
+   <property name="text">
+    <string>Add source</string>
+   </property>
+  </action>
+  <action name="removeSourceTool">
+   <property name="text">
+    <string>Remove selected source</string>
+   </property>
+  </action>
+  <action name="openProjectTool">
+   <property name="text">
+    <string>Open project</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QListWidgetItem>
 #include "Project/Project.h"
 
 QT_BEGIN_NAMESPACE
@@ -27,4 +28,13 @@ private:
 	std::unique_ptr<Ui::QProjectWindow, QProjectWindowUiDeleter> ui {};
 	Project project {};
 
+	void fillData();
+
+	void handleSourceClicked(QListWidgetItem* item);
+	void handleAddSourceTool(bool);
+	void handleRemoveSourceTool(bool);
+
+	void addSourceToList(const RtspDataSource& source);
+	int addStreamTab(QString name, QByteArray url);
+	void focusStreamTab(int tabIndex);
 };

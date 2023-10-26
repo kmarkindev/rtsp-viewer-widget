@@ -4,6 +4,7 @@
 #include <QString>
 #include <QDateTime>
 #include "RtspDataSource.h"
+#include <deque>
 
 class Project
 {
@@ -13,7 +14,7 @@ public:
 	QDateTime createdAt {};
 	QDateTime updatedAt {};
 
-	QVector<RtspDataSource> rtspDataSources {};
+	std::deque<RtspDataSource> rtspDataSources {};
 
 	[[nodiscard]] QJsonObject toJson() const;
 	static Project fromJson(QJsonObject jsonObject);

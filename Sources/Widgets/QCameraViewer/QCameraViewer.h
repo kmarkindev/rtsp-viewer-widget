@@ -25,7 +25,7 @@ signals:
 
 public:
 
-	explicit QCameraViewer(QWidget* parent);
+	explicit QCameraViewer(QWidget* parent = nullptr);
 
 	~QCameraViewer() override;
 

@@ -6,6 +6,8 @@ class RtspDataSource
 {
 public:
 
+	QString name {};
+
 	QByteArray url {};
 
 	[[nodiscard]] QJsonObject toJson() const;

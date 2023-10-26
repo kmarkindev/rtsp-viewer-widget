@@ -42,8 +42,8 @@ Project Project::fromJson(QJsonObject jsonObject)
 		{
 			if(jsonValue.isObject())
 			{
-				project.rtspDataSources.append(
-						RtspDataSource::fromJson(jsonValue.toObject())
+				project.rtspDataSources.push_back(
+					RtspDataSource::fromJson(jsonValue.toObject())
 				);
 			}
 		}
