@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.26)
-project(ip-cam-viewer)
+project(rtsp-viewer-widget)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)

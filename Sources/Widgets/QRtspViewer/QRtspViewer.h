@@ -14,7 +14,7 @@ typedef struct _GstBus GstBus;
 struct _GstMessage;
 typedef struct _GstMessage GstMessage;
 
-class QCameraViewer : public QWidget
+class QRtspViewer : public QWidget
 {
 	Q_OBJECT
 
@@ -25,9 +25,9 @@ signals:
 
 public:
 
-	explicit QCameraViewer(QWidget* parent = nullptr);
+	explicit QRtspViewer(QWidget* parent = nullptr);
 
-	~QCameraViewer() override;
+	~QRtspViewer() override;
 
 	bool start(QByteArray cameraAddress);
 	[[nodiscard]] bool started() const;
@@ -44,11 +44,11 @@ private:
 	bool setupPipeline(QByteArray address);
 	void destructPipeline();
 
-	static void handleDecodeBinPadAdded(GstElement* src, GstPad* newPad, QCameraViewer* widget);
-	static void handleRtspSourcePadAdded(GstElement* src, GstPad* newPad, QCameraViewer* widget);
+	static void handleDecodeBinPadAdded(GstElement* src, GstPad* newPad, QRtspViewer* widget);
+	static void handleRtspSourcePadAdded(GstElement* src, GstPad* newPad, QRtspViewer* widget);
 
-	static void handleBusError(GstBus* bus, GstMessage* message, QCameraViewer* widget);
-	static void handleBusEos(GstBus* bus, GstMessage* message, QCameraViewer* widget);
+	static void handleBusError(GstBus* bus, GstMessage* message, QRtspViewer* widget);
+	static void handleBusEos(GstBus* bus, GstMessage* message, QRtspViewer* widget);
 
 	bool isStarted { false };
 

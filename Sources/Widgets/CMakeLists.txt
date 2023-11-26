@@ -1,1 +1,1 @@
-add_subdirectory(QCameraViewer)
+add_subdirectory(QRtspViewer)

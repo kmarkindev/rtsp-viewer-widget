@@ -1,4 +1,4 @@
-#include "QCameraViewer.h"
+#include "QRtspViewer.h"
 
 #include <functional>
 #include <utility>
@@ -6,14 +6,14 @@
 #include <gst/video/videooverlay.h>
 #include <QHBoxLayout>
 
-QCameraViewer::QCameraViewer(QWidget* parent)
+QRtspViewer::QRtspViewer(QWidget* parent)
 	: QWidget(parent)
 {
 	setupUi();
 	clearContent();
 }
 
-bool QCameraViewer::setupPipeline(QByteArray address)
+bool QRtspViewer::setupPipeline(QByteArray address)
 {
 	// Make sure we are not creating memory leaks by rewriting pointers
 	destructPipeline();
@@ -73,15 +73,15 @@ bool QCameraViewer::setupPipeline(QByteArray address)
 	}
 
 	// Set up callback to link other elements dynamically
-	g_signal_connect(rtspSourceElement, "pad-added", G_CALLBACK(&QCameraViewer::handleRtspSourcePadAdded), this);
-	g_signal_connect(decodebin3Element, "pad-added", G_CALLBACK(&QCameraViewer::handleDecodeBinPadAdded), this);
+	g_signal_connect(rtspSourceElement, "pad-added", G_CALLBACK(&QRtspViewer::handleRtspSourcePadAdded), this);
+	g_signal_connect(decodebin3Element, "pad-added", G_CALLBACK(&QRtspViewer::handleDecodeBinPadAdded), this);
 
 	// Get bus and set up callbacks for events
 	bus = gst_element_get_bus(pipeline);
 	gst_bus_add_signal_watch(bus);
 
-	g_signal_connect(G_OBJECT(bus), "message::error", G_CALLBACK(&QCameraViewer::handleBusError), this);
-	g_signal_connect(G_OBJECT(bus), "message::eos", G_CALLBACK(&QCameraViewer::handleBusEos), this);
+	g_signal_connect(G_OBJECT(bus), "message::error", G_CALLBACK(&QRtspViewer::handleBusError), this);
+	g_signal_connect(G_OBJECT(bus), "message::eos", G_CALLBACK(&QRtspViewer::handleBusEos), this);
 
 	// Finally start pipeline
 	GstStateChangeReturn stateChangeResult = gst_element_set_state(pipeline, GST_STATE_PLAYING);
@@ -100,7 +100,7 @@ bool QCameraViewer::setupPipeline(QByteArray address)
 	return true;
 }
 
-void QCameraViewer::destructPipeline()
+void QRtspViewer::destructPipeline()
 {
 	if (pipeline)
 		gst_element_set_state(pipeline, GST_STATE_NULL);
@@ -127,12 +127,12 @@ void QCameraViewer::destructPipeline()
 	updateState(false);
 }
 
-QCameraViewer::~QCameraViewer()
+QRtspViewer::~QRtspViewer()
 {
 	destructPipeline();
 }
 
-void QCameraViewer::handleDecodeBinPadAdded(GstElement* src, GstPad* newPad, QCameraViewer* widget)
+void QRtspViewer::handleDecodeBinPadAdded(GstElement* src, GstPad* newPad, QRtspViewer* widget)
 {
 	GstPad* sinkPad = gst_element_get_static_pad(widget->videoConvertElement, "sink");
 
@@ -152,7 +152,7 @@ void QCameraViewer::handleDecodeBinPadAdded(GstElement* src, GstPad* newPad, QCa
 	gst_object_unref(sinkPad);
 }
 
-void QCameraViewer::handleRtspSourcePadAdded(GstElement* src, GstPad* newPad, QCameraViewer* widget)
+void QRtspViewer::handleRtspSourcePadAdded(GstElement* src, GstPad* newPad, QRtspViewer* widget)
 {
 	GstPad* sinkPad = gst_element_get_static_pad(widget->decodebin3Element, "sink");
 
@@ -179,7 +179,7 @@ void QCameraViewer::handleRtspSourcePadAdded(GstElement* src, GstPad* newPad, QC
 	gst_object_unref(sinkPad);
 }
 
-void QCameraViewer::handleBusError(GstBus* bus, GstMessage* message, QCameraViewer* widget)
+void QRtspViewer::handleBusError(GstBus* bus, GstMessage* message, QRtspViewer* widget)
 {
 	GError* error;
 	gchar* debugInfo;
@@ -193,32 +193,32 @@ void QCameraViewer::handleBusError(GstBus* bus, GstMessage* message, QCameraView
 	g_free(debugInfo);
 }
 
-void QCameraViewer::handleBusEos(GstBus* bus, GstMessage* message, QCameraViewer* widget)
+void QRtspViewer::handleBusEos(GstBus* bus, GstMessage* message, QRtspViewer* widget)
 {
 	widget->destructPipeline();
 }
 
-bool QCameraViewer::start(QByteArray cameraAddress)
+bool QRtspViewer::start(QByteArray cameraAddress)
 {
 	return setupPipeline(std::move(cameraAddress));
 }
 
-bool QCameraViewer::started() const
+bool QRtspViewer::started() const
 {
 	return isStarted;
 }
 
-void QCameraViewer::stop()
+void QRtspViewer::stop()
 {
 	destructPipeline();
 }
 
-void QCameraViewer::clearContent()
+void QRtspViewer::clearContent()
 {
 	// TODO:
 }
 
-void QCameraViewer::updateState(bool newState)
+void QRtspViewer::updateState(bool newState)
 {
 	bool oldState = isStarted;
 
@@ -229,7 +229,7 @@ void QCameraViewer::updateState(bool newState)
 		emit stateChanged(newState);
 }
 
-void QCameraViewer::setupUi()
+void QRtspViewer::setupUi()
 {
 	auto* HorLayout = new QHBoxLayout { this };
 	setLayout(HorLayout);
