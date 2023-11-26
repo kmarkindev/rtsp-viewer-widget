@@ -29,13 +29,13 @@ find_package(Qt6 COMPONENTS
 # use FindGStreamer.cmake from Qt prefix path
 find_package(GStreamer REQUIRED)
 
-add_executable(IpCamViewerApp)
-target_link_libraries(IpCamViewerApp PRIVATE
+add_executable(App)
+target_link_libraries(App PRIVATE
     Qt::Core
     Qt::Gui
     Qt::Widgets
     GStreamer::GStreamer
 )
-target_include_directories(IpCamViewerApp PRIVATE Sources)
+target_include_directories(App PRIVATE Sources)
 
 add_subdirectory(Sources)

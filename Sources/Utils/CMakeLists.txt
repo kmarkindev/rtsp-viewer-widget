@@ -1,3 +1,3 @@
-target_sources(IpCamViewerApp PRIVATE
+target_sources(App PRIVATE
     GLibMainLoopAdapter.cpp
 )

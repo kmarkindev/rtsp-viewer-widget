@@ -1,4 +1,4 @@
-target_sources(IpCamViewerApp PRIVATE
+target_sources(App PRIVATE
     Main.cpp
 )
 
