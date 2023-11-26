@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <gst/gst.h>
+#include <QMessageBox>
 #include "Utils/GLibMainLoopAdapter.h"
 #include "Widgets/QCameraViewer/QCameraViewer.h"
 
@@ -24,6 +25,14 @@ int main(int argc, char* argv[])
 	QByteArray address = argv[1];
 
 	QCameraViewer viewer {};
+	viewer.resize(800, 600);
+	viewer.show();
+
+	QObject::connect(&viewer, &QCameraViewer::errorOccurred, &viewer, [](QString msg)
+	{
+		QMessageBox::warning(nullptr, "Error from RTSP viewer", msg);
+	});
+
 	viewer.start(address);
 
 	return QApplication::exec();
