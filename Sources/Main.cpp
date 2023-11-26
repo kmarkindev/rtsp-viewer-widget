@@ -2,7 +2,7 @@
 #include <gst/gst.h>
 #include <QMessageBox>
 #include "Utils/GLibMainLoopAdapter.h"
-#include "Widgets/QCameraViewer/QRtspViewer.h"
+#include "Widgets/QRtspViewer/QRtspViewer.h"
 
 void initializeGStreamer(int argc, char* argv[])
 {
