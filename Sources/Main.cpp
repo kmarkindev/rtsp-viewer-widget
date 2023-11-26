@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <gst/gst.h>
 #include "Utils/GLibMainLoopAdapter.h"
-#include "Widgets/QProjectSelectorWindow/QProjectSelectorWindow.h"
+#include "Widgets/QCameraViewer/QCameraViewer.h"
 
 void initializeGStreamer(int argc, char* argv[])
 {
@@ -17,8 +17,14 @@ int main(int argc, char* argv[])
 
 	initializeGStreamer(argc, argv);
 
-	auto selectorWindow = new QProjectSelectorWindow {};
-	selectorWindow->show();
+	if(argc < 2) {
+		return -1;
+	}
+
+	QByteArray address = argv[1];
+
+	QCameraViewer viewer {};
+	viewer.start(address);
 
 	return QApplication::exec();
 }

@@ -1,3 +1,1 @@
 add_subdirectory(QCameraViewer)
-add_subdirectory(QProjectSelectorWindow)
-add_subdirectory(QProjectWindow)

@@ -4,4 +4,3 @@ target_sources(IpCamViewerApp PRIVATE
 
 add_subdirectory(Widgets)
 add_subdirectory(Utils)
-add_subdirectory(Project)
